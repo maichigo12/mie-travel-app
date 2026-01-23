@@ -24,12 +24,17 @@ import streamlit as st
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
-MODEL_NAME = "maichigo12/mie-bert-travel"
+MODEL_NAME = "maichigo/mie-bert-travel"
 
 @st.cache_resource
 def load_model():
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-    model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME) 
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, use_fast=False)
+    # model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME) 
+    model = AutoModelForSequenceClassification.from_pretrained(
+    MODEL_NAME,
+    torch_dtype="auto",
+    device_map="cpu"
+    ) 
     model.eval()  # 推論モード
     return tokenizer, model
 
