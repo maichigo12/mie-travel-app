@@ -4,5 +4,6 @@ torch==2.8.0
 sentencepiece
 safetensors
 protobuf>=4.25.0
-
-
+ortools
+pandas
+numpy
