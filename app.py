@@ -20,11 +20,17 @@ st.title("🧳 三重県 1泊2日 観光プラン提案アプリ")
 # =====================
 # モデル読み込み
 # =====================
+import streamlit as st
+import torch
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+
+MODEL_NAME = "maichigo12/mie-bert-travel"
+
 @st.cache_resource
 def load_model():
-    tokenizer = AutoTokenizer.from_pretrained("mie_bert_model")
-    model = AutoModelForSequenceClassification.from_pretrained("mie_bert_model")
-    model.eval()
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+    model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME) 
+    model.eval()  # 推論モード
     return tokenizer, model
 
 tokenizer, model = load_model()
@@ -35,13 +41,17 @@ label_names = ["sea","mountain","nature","history",
 
 def predict_labels(text, threshold=0.5):
     inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True)
+
     with torch.no_grad():
         outputs = model(**inputs)
 
-    probs = torch.sigmoid(outputs.logits)[0].numpy()
+    probs = torch.sigmoid(outputs.logits)[0].cpu().numpy()
+
     scores = {label_names[i]: float(probs[i]) for i in range(len(label_names))}
     active = [k for k, v in scores.items() if v >= threshold]
+
     return scores, active
+
 
 
 # =====================
