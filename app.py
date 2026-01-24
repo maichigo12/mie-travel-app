@@ -86,6 +86,10 @@ st.subheader("🔍 推定された旅行タイプ")
 st.write(active_labels)
 
 spot_ranking = calc_spot_scores(scores, spots_df)
+if spot_ranking.empty:
+    st.error("条件に合う観光地が見つかりませんでした")
+    st.stop()
+
 top_spots = spot_ranking.head(4)
 
 
