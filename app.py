@@ -58,7 +58,12 @@ def predict_labels(text, threshold=0.5):
 # CSV 読み込み
 # =====================
 spots_df = pd.read_csv("data/mie_spot.csv")
+# ↓ ここを追加：カラム名の前後の空白を削除し、一律でクリーンにする
+spots_df.columns = spots_df.columns.str.strip()
+
 hotels_df = pd.read_csv("data/mie_hotel.csv")
+# ↓ ついでにホテル側もやっておくと安全です
+hotels_df.columns = hotels_df.columns.str.strip()
 
 NAGOYA = {"name": "名古屋駅", "lat": 35.1709, "lon": 136.8815}
 
