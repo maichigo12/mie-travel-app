@@ -1,4 +1,4 @@
-spot_id,spot_name,lat,lon,text,sea,mountain,nature,history,play,shopping,food,family,rain
+﻿spot_id,spot_name,lat,  lon,text,sea,mountain,nature,history,play,shopping,food,family,rain
 1,三井アウトレットパーク ジャズドリーム長島,35.03030575,136.7254342,三井アウトレットパーク ジャズドリーム長島は多数のブランド店舗が集まる大型商業施設で、買い物（shopping）が目的の観光地。屋内外に飲食店（food）も充実しており、家族連れ（family)でも利用しやすく、雨の日（rain）でも楽しめる。,0,0,0,0,0,1,1,1,1
 2,伊勢神宮,34.45515394,136.7251694,伊勢神宮は日本を代表する神社で、長い歴史（history）と文化を感じることができる神聖な場所。豊かな森林に囲まれた境内は自然（nature）を感じられ、落ち着いた雰囲気の中で参拝できる。家族連れ（family）にも人気がある。,0,0,1,1,0,0,0,1,0
 3,おかげ横丁,34.46258106,136.722861,おかげ横丁は伊勢神宮の門前町として整備された歴史ある街並みが特徴。食べ歩き（food）や買い物（shopping）を楽しめ、家族連れ（family）にも人気の観光エリア。,0,0,0,1,0,1,1,1,0
