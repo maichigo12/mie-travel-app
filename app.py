@@ -101,7 +101,7 @@ st.header("② おすすめ観光地")
 cols = st.columns(2)
 for i, (_, row) in enumerate(top_spots.iterrows()):
     with cols[i % 2]:
-        st.subheader(row["spot_name"])
+        st.subheader(row["name"])
         if "img_url" in row:
             st.image(row["img_url"], use_column_width=True)
         st.write(f"スコア：{row['score']:.2f}")
@@ -155,13 +155,13 @@ hotel_location = {
 
 day1_locations = (
     [NAGOYA] +
-    day1_df[["spot_name","lat","lon"]].rename(columns={"spot_name": "name"}).to_dict("records") +
+    day1_df[["name","lat","lon"]].to_dict("records") +
     [hotel_location]
 )
 
 day2_locations = (
     [hotel_location] +
-    day2_df[["spot_name","lat","lon"]].rename(columns={"spot_name": "name"}).to_dict("records") +
+    day2_df[["name","lat","lon"]].to_dict("records") +
     [NAGOYA]
 )
 
