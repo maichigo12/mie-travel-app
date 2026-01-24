@@ -155,19 +155,16 @@ hotel_location = {
 
 day1_locations = (
     [NAGOYA] +
-    day1_df[["spot_name","lat","lon"]]
-        .rename(columns={"spot_name": "name"})
-        .to_dict("records") +
+    day1_df[["spot_name","lat","lon"]].rename(columns={"spot_name": "name"}).to_dict("records") +
     [hotel_location]
 )
 
 day2_locations = (
     [hotel_location] +
-    day2_df[["spot_name","lat","lon"]]
-        .rename(columns={"spot_name": "name"})
-        .to_dict("records") +
+    day2_df[["spot_name","lat","lon"]].rename(columns={"spot_name": "name"}).to_dict("records") +
     [NAGOYA]
 )
+
 
 day1_route = solve_tsp(day1_locations)
 day2_route = solve_tsp(day2_locations)
