@@ -1,19 +1,21 @@
 # スコア型でホテルを評価する関数
 import pandas as pd
-def rank_hotels(hotels_df, user_hotel_pref):
-    results = []
+def rank_hotels(hotels_df, user_pref):
+    hotels = hotels_df.copy()
+    scores = []
 
-    for _, row in hotels_df.iterrows():
+    for _, row in hotels.iterrows():
         score = 0
-        for key, value in user_hotel_pref.items():
-            score += row[key] * value
-            score -= distance_from_spots * 0.1 # 観光地に近いホテルが有利
 
-        results.append({
-            "name": row["name"],
-            "area": row["area"],
-            "type": row["type"],
-            "score": score
-        })
+        score += user_pref["family"] * row.get("family", 0)
+        score += user_pref["couple"] * row.get("couple", 0)
+        score += user_pref["hot_spring"] * row.get("hot_spring", 0)
+        score += user_pref["scenic"] * row.get("scenic", 0)
+        score += user_pref["near_station"] * row.get("near_station", 0)
+        score += user_pref["shopping"] * row.get("shopping", 0)
 
-    return pd.DataFrame(results).sort_values("score", ascending=False)
+        scores.append(score)
+
+    hotels["score"] = scores
+    return hotels.sort_values("score", ascending=False)
+
