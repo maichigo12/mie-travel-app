@@ -155,7 +155,7 @@ hotel_location = {
 
 day1_locations = (
     [NAGOYA] +
-    day1_df[["spot_name","lat","lon"]].to_dict("records") +
+    day1_df[["name","lat","lon"]].to_dict("records") +
     [hotel_location]
 )
 
