@@ -153,15 +153,15 @@ hotel_location = {
     "lon": hotel["lon"]
 }
 
-day1_locations = (
+dday1_locations = (
     [NAGOYA] +
-    day1_df[["spot_name","lat","lon"]].rename(columns={"spot_name": "name"}).to_dict("records") +
+    day1_df[["name","lat","lon"]].to_dict("records") +
     [hotel_location]
 )
 
 day2_locations = (
     [hotel_location] +
-    day2_df[["spot_name","lat","lon"]].rename(columns={"spot_name": "name"}).to_dict("records") +
+    day2_df[["name","lat","lon"]].to_dict("records") +
     [NAGOYA]
 )
 
