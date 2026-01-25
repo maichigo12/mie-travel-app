@@ -7,3 +7,5 @@ protobuf>=4.25.0
 ortools
 pandas
 numpy
+folium
+streamlit-folium

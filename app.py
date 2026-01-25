@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import torch
 import streamlit.components.v1 as components
+import folium
+from streamlit_folium import st_folium
 
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
@@ -55,18 +57,41 @@ def predict_labels(text, threshold=0.5):
     return scores, active
 
 # GoogleマップをStreamlitに直接表示する関数
-def show_google_map_route(locations):
-    """
-    locations = [{"name": 場所名, "lat": 緯度, "lon": 経度}, ...]
-    のリストを受け取り、Googleマップのルートを埋め込み表示
-    """
-    place_names = [loc["name"] for loc in locations]
-    route_url = "https://www.google.com/maps/dir/" + "/".join(place_names) + "/?output=embed"
+# def show_google_map_route(locations):
+ #    """
+ #    locations = [{"name": 場所名, "lat": 緯度, "lon": 経度}, ...]
+ #    のリストを受け取り、Googleマップのルートを埋め込み表示
+ #    """
+ #    place_names = [loc["name"] for loc in locations]
+ #    route_url = "https://www.google.com/maps/dir/" + "/".join(place_names) + "/?output=embed"
 
-    components.html(
-        f'<iframe src="{route_url}" width="100%" height="500"></iframe>',
-        height=500,
+#     components.html(
+#        f'<iframe src="{route_url}" width="100%" height="500"></iframe>',
+#         height=500,
+#     )
+
+
+# folum地図表示関数
+def show_map_osm(locations):
+    # 最初の地点を中心に地図作成
+    m = folium.Map(
+        location=[locations[0]["lat"], locations[0]["lon"]],
+        zoom_start=9
     )
+
+    # マーカー追加
+    for loc in locations:
+        folium.Marker(
+            [loc["lat"], loc["lon"]],
+            popup=loc["name"]
+        ).add_to(m)
+
+    # ルート線を引く
+    coords = [(loc["lat"], loc["lon"]) for loc in locations]
+    folium.PolyLine(coords).add_to(m)
+
+    # Streamlitに表示
+    st_folium(m, width=700, height=500)
 
 
 # =====================
@@ -200,6 +225,7 @@ day2_route = solve_tsp(day2_locations, start_index=0, end_index=len(day2_locatio
 # =====================
 st.header("④ 1泊2日モデルルート")
 
+# googlemapクリック表示
 # st.subheader("🗓 Day1")
 # st.write(" → ".join(day1_route))
 #st.markdown(f"[Googleマップで開く]({make_google_map_url(day1_route)})")
@@ -208,10 +234,20 @@ st.header("④ 1泊2日モデルルート")
 # st.write(" → ".join(day2_route))
 #st.markdown(f"[Googleマップで開く]({make_google_map_url(day2_route)})")
 
+# googlemap埋め込み表示
+# st.subheader("🗓 Day1 ルート")
+# st.write(" → ".join(day1_route))
+# show_google_map_route(day1_locations)
+
+# st.subheader("🗓 Day2 ルート")
+# st.write(" → ".join(day2_route))
+# show_google_map_route(day2_locations)
+
+# folum埋め込み表示
 st.subheader("🗓 Day1 ルート")
 st.write(" → ".join(day1_route))
-show_google_map_route(day1_locations)
+show_map_osm(day1_locations)
 
 st.subheader("🗓 Day2 ルート")
 st.write(" → ".join(day2_route))
-show_google_map_route(day2_locations)
+show_map_osm(day2_locations)
