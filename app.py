@@ -123,15 +123,27 @@ col1, col2, col3 = st.columns(3)
 
 with col1:
     family = st.checkbox("家族向け")
-    hot_spring = st.checkbox("温泉")
+    couple = st.checkbox("カップル")
+    kids_room = st.checkbox("キッズルームあり")
+
 
 with col2:
-    couple = st.checkbox("カップル")
     scenic = st.checkbox("景色が良い")
+    beach_front = st.checkbox("海が目の前")
+    hot_spring = st.checkbox("温泉")
+    ocean_view_bath = st.checkbox("海の見えるお風呂")
+    
 
 with col3:
     near_station = st.checkbox("駅近")
+    ise_shima_access = st.checkbox("伊勢志摩観光に便利")
     shopping = st.checkbox("買い物便利")
+
+with col4:
+    glamping = st.checkbox("グランピング")
+    quiet = st.checkbox("静かな場所")
+    private_dining = st.checkbox("部屋食あり") 
+       
 
 user_hotel_pref = {
     "family": int(family),
@@ -139,7 +151,16 @@ user_hotel_pref = {
     "hot_spring": int(hot_spring),
     "scenic": int(scenic),
     "near_station": int(near_station),
-    "shopping": int(shopping)
+    "glamping": int(glamping),
+    "shopping": int(shopping),
+    "ocean_view_bath": int(ocean_view_bath),
+    "quiet": int(quiet),
+    "ise_shima_access": int(ise_shima_access),
+    "beach_front": int(beach_front),
+    "kids_room": int(kids_room),
+    "private_dining": int(private_dining)
+    
+
 }
 
 ranked_hotels = rank_hotels(hotels_df, user_hotel_pref)
