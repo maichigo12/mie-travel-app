@@ -37,3 +37,7 @@ def solve_tsp(locations, start_index=0, end_index=None):
 
     return route
 
+
+def make_google_map_url(route_names):
+    base = "https://www.google.com/maps/dir/"
+    return base + "/".join(route_names)
