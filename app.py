@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import torch
+import streamlit.components.v1 as components
 
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
@@ -52,6 +53,19 @@ def predict_labels(text, threshold=0.5):
 
     return scores, active
 
+# GoogleマップをStreamlitに直接表示する関数
+def show_google_map_route(locations):
+    """
+    locations = [{"name": 場所名, "lat": 緯度, "lon": 経度}, ...]
+    のリストを受け取り、Googleマップのルートを埋め込み表示
+    """
+    place_names = [loc["name"] for loc in locations]
+    route_url = "https://www.google.com/maps/dir/" + "/".join(place_names) + "/?output=embed"
+
+    components.html(
+        f'<iframe src="{route_url}" width="100%" height="500"></iframe>',
+        height=500,
+    )
 
 
 # =====================
@@ -172,8 +186,12 @@ day2_locations = (
 )
 
 
-day1_route = solve_tsp(day1_locations)
-day2_route = solve_tsp(day2_locations)
+# Day1：名古屋スタート → ホテルゴール
+day1_route = solve_tsp(day1_locations, start_index=0, end_index=len(day1_locations)-1)
+
+# Day2：ホテルスタート → 名古屋ゴール
+day2_route = solve_tsp(day2_locations, start_index=0, end_index=len(day2_locations)-1)
+
 
 
 # =====================
@@ -181,10 +199,18 @@ day2_route = solve_tsp(day2_locations)
 # =====================
 st.header("④ 1泊2日モデルルート")
 
-st.subheader("🗓 Day1")
-st.write(" → ".join(day1_route))
-st.markdown(f"[Googleマップで開く]({make_google_map_url(day1_route)})")
+# st.subheader("🗓 Day1")
+# st.write(" → ".join(day1_route))
+#st.markdown(f"[Googleマップで開く]({make_google_map_url(day1_route)})")
 
-st.subheader("🗓 Day2")
+# st.subheader("🗓 Day2")
+# st.write(" → ".join(day2_route))
+#st.markdown(f"[Googleマップで開く]({make_google_map_url(day2_route)})")
+
+st.subheader("🗓 Day1 ルート")
+st.write(" → ".join(day1_route))
+show_google_map_route(day1_locations)
+
+st.subheader("🗓 Day2 ルート")
 st.write(" → ".join(day2_route))
-st.markdown(f"[Googleマップで開く]({make_google_map_url(day2_route)})")
+show_google_map_route(day2_locations)
