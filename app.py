@@ -125,6 +125,7 @@ with col1:
     family = st.checkbox("家族向け")
     couple = st.checkbox("カップル")
     kids_room = st.checkbox("キッズルームあり")
+    quiet = st.checkbox("静かな場所")
 
 
 with col2:
@@ -132,19 +133,15 @@ with col2:
     beach_front = st.checkbox("海が目の前")
     hot_spring = st.checkbox("温泉")
     ocean_view_bath = st.checkbox("海の見えるお風呂")
-    
+    private_dining = st.checkbox("部屋食あり") 
 
 with col3:
     near_station = st.checkbox("駅近")
+    glamping = st.checkbox("グランピング")
     ise_shima_access = st.checkbox("伊勢志摩観光に便利")
     shopping = st.checkbox("買い物便利")
 
-with col4:
-    glamping = st.checkbox("グランピング")
-    quiet = st.checkbox("静かな場所")
-    private_dining = st.checkbox("部屋食あり") 
-       
-
+    
 user_hotel_pref = {
     "family": int(family),
     "couple": int(couple),
