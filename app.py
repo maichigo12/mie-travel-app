@@ -7,7 +7,8 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 from utils.scoring import calc_spot_scores
 from utils.hotel import rank_hotels
-from utils.route import solve_tsp, make_google_map_url
+# from utils.route import solve_tsp, make_google_map_url
+from utils.route import solve_tsp
 
 
 # =====================
