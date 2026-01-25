@@ -3,14 +3,23 @@ import math
 
 
 def solve_tsp(locations, start_index=0, end_index=None):
-    from ortools.constraint_solver import pywrapcp, routing_enums_pb2
-    import math
 
     def distance(a, b):
         return math.sqrt((a["lat"] - b["lat"])**2 + (a["lon"] - b["lon"])**2)
 
     size = len(locations)
-    manager = pywrapcp.RoutingIndexManager(size, 1, start_index, end_index if end_index is not None else start_index)
+
+    # ★ ここが修正ポイント！！！
+    if end_index is None:
+        end_index = start_index
+
+    manager = pywrapcp.RoutingIndexManager(
+        size,
+        1,                      # 車両数
+        [start_index],          # スタート地点（リスト）
+        [end_index]             # ゴール地点（リスト）
+    )
+
     routing = pywrapcp.RoutingModel(manager)
 
     def distance_callback(from_index, to_index):
@@ -28,12 +37,11 @@ def solve_tsp(locations, start_index=0, end_index=None):
 
     index = routing.Start(0)
     route = []
+
     while not routing.IsEnd(index):
         node = manager.IndexToNode(index)
         route.append(locations[node]["name"])
         index = solution.Value(routing.NextVar(index))
 
     node = manager.IndexToNode(index)
-    route.append(locations[node]["name"])
-
-    return route
+    route.app
