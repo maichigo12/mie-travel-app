@@ -9,7 +9,9 @@ def solve_tsp(locations, start_index=0, end_index=None):
         return math.sqrt((a["lat"] - b["lat"])**2 + (a["lon"] - b["lon"])**2)
 
     size = len(locations)
-    manager = pywrapcp.RoutingIndexManager(size, 1, start_index, end_index if end_index is not None else start_index)
+    if end_index is None:
+        end_index = start_index
+    manager = pywrapcp.RoutingIndexManager(size, 1, [start_index], [end_index])
     routing = pywrapcp.RoutingModel(manager)
 
     def distance_callback(from_index, to_index):
