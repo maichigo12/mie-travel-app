@@ -44,5 +44,5 @@ def solve_tsp(locations, start_index=0, end_index=None):
         index = solution.Value(routing.NextVar(index))
 
     node = manager.IndexToNode(index)
-    route.append(locations[current_index]["name"])
+    route.append(locations[node]["name"])
     return route
