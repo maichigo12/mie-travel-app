@@ -109,8 +109,9 @@ cols = st.columns(2)
 for i, (_, row) in enumerate(top_spots.iterrows()):
     with cols[i % 2]:
         st.subheader(row["spot_name"])
-        if "img_url" in row:
-            st.image(row["img_url"], use_column_width=True)
+        # if "img_url" in row:
+            # st.image(row["img_url"], use_column_width=True)
+        st.write(row["description"])     
         st.write(f"スコア：{row['score']:.2f}")
 
 
@@ -164,6 +165,7 @@ ranked_hotels = rank_hotels(hotels_df, user_hotel_pref)
 hotel = ranked_hotels.iloc[0]
 
 st.success(f"🏨 おすすめ宿泊施設：{hotel['name']}（{hotel['area']}）")
+st.write(hotel["description"])
 
 
 # =====================
