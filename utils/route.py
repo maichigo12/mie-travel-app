@@ -40,6 +40,9 @@ def solve_tsp(locations, start_index=0, end_index=None):
     return route
 
 
-def make_google_map_url(route_names):
+import urllib.parse
+
+def make_google_map_url(route):
     base = "https://www.google.com/maps/dir/"
-    return base + "/".join(route_names)
+    encoded_places = [urllib.parse.quote(place) for place in route]
+    return base + "/".join(encoded_places)
