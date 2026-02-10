@@ -65,7 +65,7 @@ def adjust_scores_by_keywords(text, scores, label_names):
         if label in keyword_boost:
             for keyword in keyword_boost[label]:
                 if keyword in text:
-                    adjusted_scores[label] *= 1.5  # ブースト倍率
+                    adjusted_scores[label] *= 1.8  # ブースト倍率
                     break
     
     return adjusted_scores
