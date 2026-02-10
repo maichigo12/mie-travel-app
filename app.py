@@ -61,16 +61,20 @@ def adjust_scores_by_keywords(text, scores, label_names):
     
     adjusted_scores = scores.copy()
 
-    BOOST_VALUE = 0.3  # ★この値を調整（0.2～0.5推奨）
+    BOOST_VALUE = 0.5  # ★この値を調整（0.2～0.5推奨）
     
     for label in label_names:
         if label in keyword_boost:
+            matched = False
             for keyword in keyword_boost[label]:
                 if keyword in text:
-                    adjusted_scores[label] += BOOST_VALUE
-                     # スコアが1.0を超えないように制限
-                    adjusted_scores[label] = min(adjusted_scores[label], 1.0)
+                    matched = True
                     break
+            
+            if matched:
+                adjusted_scores[label] += BOOST_VALUE
+                # スコアが1.0を超えないように制限
+                adjusted_scores[label] = min(adjusted_scores[label], 1.0)
     
     return adjusted_scores
 
