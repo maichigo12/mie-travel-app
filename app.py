@@ -60,12 +60,16 @@ def adjust_scores_by_keywords(text, scores, label_names):
     }
     
     adjusted_scores = scores.copy()
+
+    BOOST_VALUE = 0.3  # ★この値を調整（0.2～0.5推奨）
     
     for label in label_names:
         if label in keyword_boost:
             for keyword in keyword_boost[label]:
                 if keyword in text:
-                    adjusted_scores[label] *= 1.8  # ブースト倍率
+                    adjusted_scores[label] += BOOST_VALUE
+                     # スコアが1.0を超えないように制限
+                    adjusted_scores[label] = min(adjusted_scores[label], 1.0)
                     break
     
     return adjusted_scores
@@ -80,12 +84,21 @@ def predict_labels(text, threshold=0.5):
 
     probs = torch.sigmoid(outputs.logits)[0].cpu().numpy()
 
-    scores = {label_names[i]: float(probs[i]) for i in range(len(label_names))}
+    scores_original = {label_names[i]: float(probs[i]) for i in range(len(label_names))}
+    scores = adjust_scores_by_keywords(text, scores_original, label_names)
     
-    # ★ここでスコア調整を適用★
-    scores = adjust_scores_by_keywords(text, scores, label_names)    
+    # ★デバッグ出力★
+    st.write("### スコア比較")
+    comparison_df = pd.DataFrame({
+        'ラベル': label_names,
+        '調整前': [scores_original[label] for label in label_names],
+        '調整後': [scores[label] for label in label_names],
+        '変化': [scores[label] - scores_original[label] for label in label_names]
+    })
+    st.dataframe(comparison_df)
     
     active = [k for k, v in scores.items() if v >= threshold]
+
 
     return scores, active
 
