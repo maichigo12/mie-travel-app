@@ -40,6 +40,37 @@ tokenizer, model = load_model()
 label_names = ["sea","mountain","nature","history",
                "play","shopping","food","family","rain"]
 
+# =====================
+# キーワードブースト関数（★ここに追加★）
+# =====================
+def adjust_scores_by_keywords(text, scores, label_names):
+    """
+    キーワードに基づいてスコアを調整する関数
+    """
+    keyword_boost = {
+        'sea': ['海', 'ビーチ', '海岸', '波', 'マリン', '砂浜', '水族館', '海水浴', '真珠'],
+        'mountain': ['山', '登山', 'ハイキング', '峠', '高原', '山頂', '渓谷', '山登り'],
+        'nature': ['自然', '景色', '絶景', '風景', 'エコ', '森', '公園', '花', '紅葉', '星空', '川'],
+        'history': ['歴史', '文化', '伝統', '寺', '神社', '城', '古い', '遺跡', '文化財', '伊勢', '武将', '忍者'],
+        'play': ['遊ぶ', '体験', 'アクティビティ', 'レジャー', '楽しむ', 'テーマパーク', '動物園', '遊園地', '水族館'],
+        'shopping': ['買い物', 'ショッピング', 'お土産', '店', 'モール', '商店街', '市場', 'アウトレット', '特産品'],
+        'food': ['食べ', 'グルメ', '料理', 'レストラン', '美味', 'おいしい', 'カフェ', '食事', 'ランチ', '名物', '食べ歩き', '松阪牛', '伊勢海老'],
+        'family': ['家族', '子供', 'ファミリー', '親子', '子ども', 'キッズ', '赤ちゃん', '3世代'],
+        'rain': ['雨', '屋内', 'インドア', '雨天', '室内', '天候', '濡れない', '雨の日', '博物館', '美術館']
+    }
+    
+    adjusted_scores = scores.copy()
+    
+    for label in label_names:
+        if label in keyword_boost:
+            for keyword in keyword_boost[label]:
+                if keyword in text:
+                    adjusted_scores[label] *= 1.5  # ブースト倍率
+                    break
+    
+    return adjusted_scores
+
+
 
 def predict_labels(text, threshold=0.5):
     inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True)
@@ -50,6 +81,10 @@ def predict_labels(text, threshold=0.5):
     probs = torch.sigmoid(outputs.logits)[0].cpu().numpy()
 
     scores = {label_names[i]: float(probs[i]) for i in range(len(label_names))}
+    
+    # ★ここでスコア調整を適用★
+    scores = adjust_scores_by_keywords(text, scores, label_names)    
+    
     active = [k for k, v in scores.items() if v >= threshold]
 
     return scores, active
